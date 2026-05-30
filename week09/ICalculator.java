@@ -1,7 +1,7 @@
 package week09;
 
 public interface ICalculator {
-	String PLUS="pluse",Minus="minus",Mutiple="multiple";
+	String PLUS="pluse",Minus="minus",Mutiple="multiple"; //plus,minus,mutiple은 상수
 	
 	public int plus(int i,int j);
 	public int minus(int i,int j);
@@ -17,7 +17,7 @@ public interface ICalculator {
 	public static int exec(String opt,int i,int j){
 		initMessage(opt);
 		CalculatorImpl cal=new CalculatorImpl();
-		int retVal=0;
+		int retVal=0; //안전하게 초기화
 		
 		switch(opt) {
 		case "plus":

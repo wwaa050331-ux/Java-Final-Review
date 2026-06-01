@@ -35,8 +35,9 @@ public interface ICalculator {
 📌 요약 및 결론인터페이스(Interface): 클래스를 만들기 위한 설계도. 내부 코드에 매개변수나 여러 변수 선언이 가능함.
 구현(Implement): 설계도를 바탕으로 실제 기능을 채워 넣는 것.
 
-2일차: 인터페이스와 예외 클래스 (Week 10)📌
+## 2일차: 인터페이스와 예외 클래스 (Week 10)📌
 
+### 간단 개념정리
 인터페이스 기본 개념:구현 클래스 선언 시 자식 클래스가 앞에 오고 implements 뒤에 인터페이스가 위치함.
 main 메서드는 프로그램 실행 시 누구보다 먼저 실행됨.
 public class Computer implements Controllable { ... }
@@ -66,6 +67,7 @@ Controllable.reset();
 @Override: 오타나 실수하지 않도록 컴퓨터가 미리 검사해 주는 안전벨트(알림 마크)
 오버로딩 (Overloading)새로 추가하기 (같은 이름으로 여러 개 만들기)매개변수의 타입이나 개수가 달라야 함🙄 다형성과 형변환 (Controllable 예제)
 
+### 핵심코드 분석
 // 다형성과 업캐스팅: TV는 Controllable을 구현하기 때문에 더 높음 -> 업캐스팅하여 배열로 묶기 가능
 Controllable[] controllable = { new TV(), new Computer() }; 
 
@@ -106,7 +108,7 @@ ArithmeticException: 수학적인 계산 에러 (예: 0으로 나누기 등)
 🧼 finally {} 블록in.close() 등을 대신하여 쓰기 가능하며, 마지막에 무조건 딱 한 번 실행됨
 보통 데이터베이스 연결을 끊거나, 열어두었던 메모리 파일들을 안전하게 닫아줄 때 사용.
 
-💻 예외 처리 예시 코드
+### 💻 예외 처리 예시 코드
 // 호출 및 실행부
 try {
     td.square(in.nextLine()); // "사장님 이거 문제 있어요" (예외 발생 가능 지점)

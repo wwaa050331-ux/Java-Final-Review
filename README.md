@@ -8,7 +8,7 @@
 * ⚠️ [예외 클래스 요약](#-예외-클래스-exception-class)
 * 📅 [3일차: 재네릭 클래스](#3일차-재네릭-클래스-week-11)
 * 📅 [4일차: 기본 API 및 Object, 컬렉션 프레임워크, 익명 클래스/람다식](#4일차-기본-api-및-object-컬렉션-프레임워크-익명-클래스람다식week12)
-* 📅 [5일차: HashSet, HashMap, Collections 유틸리티 기능](#13주차-실습-핵심-개념-총정리)
+* 📅 [5일차: 컬렉션 & 유틸리티 바로가기](#5일차-hashset-hashmap-collections-유틸리티-기능-week13)
 
 ---
 
@@ -383,7 +383,7 @@ public class FuntionalIntEx {
 
 ---
 
-## 📅 13주차 실습 핵심 개념 총정리
+## 📅 5일차: HashSet, HashMap, Collections 유틸리티 기능 (week13)
 13주차 실습에서 다룬 자바 중급 과정의 핵심 테마(HashSet, HashMap, Collections 유틸리티 기능)에 대한 상세 정의, 사용법, 실습 코드 복원 및 분석 문서입니다.
 
 ---

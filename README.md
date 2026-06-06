@@ -383,7 +383,7 @@ public class FuntionalIntEx {
 
 ---
 
-## 📅 Java 13주차 실습 핵심 개념 총정리
+## 📅 13주차 실습 핵심 개념 총정리
 13주차 실습에서 다룬 자바 중급 과정의 핵심 테마(HashSet, HashMap, Collections 유틸리티 기능)에 대한 상세 정의, 사용법, 실습 코드 복원 및 분석 문서입니다.
 
 ---

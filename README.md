@@ -6,8 +6,8 @@
 * 📅 [1일차: 인터페이스와 구현](#1일차-인터페이스와-구현-week-09)
 * 📅 [2일차: 인터페이스와 예외 클래스](#2일차-인터페이스와-예외-클래스-week-10)
 * ⚠️ [예외 클래스 요약](#-예외-클래스-exception-class)
-* 📅 [3일차: 재네릭 클래스](#-3일차-재네릭-클래스-Week-11))
-* 📅 [4일차: 기본 API 및 Object, 컬렉션 프레임워크, 익명 클래스/람다식](#-4일차-기본-API-및-Object-컬렉션-프레임워크-익명-클래스/람다식-week12-)
+* 📅 [3일차: 재네릭 클래스](#3일차-재네릭-클래스-week-11)
+* 📅 [4일차: 기본 API 및 Object, 컬렉션 프레임워크, 익명 클래스/람다식](#4일차-기본-api-및-object-컬렉션-프레임워크-익명-클래스람다식week12)
 
 ---
 
@@ -165,14 +165,16 @@ super()는 "나를 만들어준 부모 클래스의 생성자를 호출하는 �
 | **특징** | 메모리 효율이 좋고 아주 빠름. | `null`을 가질 수 있고, 다양한 기능(메서드)을 제공함. |
 | **제네릭** | `< >` 안에 절대 들어갈 수 없음! ❌ | `< >` 안에 들어갈 수 있음! ⭕ |    
 
+---
+
 ## 4일차: 기본 API 및 Object, 컬렉션 프레임워크, 익명 클래스/람다식(week12)
 
-# 📅 Java 12주차 실습 핵심 개념 총정리 (테마 1, 2, 3 전체)
+## 📅 Java 12주차 실습 핵심 개념 총정리 (테마 1, 2, 3 전체)
 
 📅 Java 12주차 실습 핵심 개념 총정리
 12주차 실습에서 다룬 자바 중급 과정의 3대 핵심 테마(기본 API 및 Object, 컬렉션 프레임워크, 익명 클래스/람다식)에 대한 상세 정의, 사용법, 실습 코드 분석 문서입니다.
 
-📂 테마 1: 자바의 뿌리 클래스들과 데이터 변환
+**📂 테마 1: 자바의 뿌리 클래스들과 데이터 변환**
 관련 파일: Keyboard.java, ObjectMethodDemo.java, WrapperDemo.java, StringTokenizerDemo.java
 
 1. Object 클래스와 오버라이딩 (toString, equals)
@@ -182,7 +184,7 @@ super()는 "나를 만들어준 부모 클래스의 생성자를 호출하는 �
 
 실습 코드 기반 예시 (Keyboard.java & ObjectMethodDemo.java):
 
-Java
+```java
 public class Keyboard {
     String name;
 
@@ -207,12 +209,14 @@ public class Keyboard {
         return false; // 키보드가 아니거나 이름이 다르면 false!
     }
 }
+```
+
 2. 래퍼 클래스 (Wrapper Class) & 오토 박싱/언박싱
 개념 및 정의: int, double 같은 기초 타입은 가볍고 빠르지만 객체가 아니라서 제네릭이나 만능 주머니(Collection)에 넣을 수 없습니다. 이를 해결하기 위해 기초 타입을 객체 상자 형태로 포장해 놓은 클래스들을 래퍼 클래스라고 합니다. (Integer, Double, Float 등)
 
 사용법 및 예시 (WrapperDemo.java 기반):
 
-Java
+```java
 Integer bi1 = new Integer(10); // 정석대로 상자에 10을 포장하는 방법 (구버전 방식)
 
 Integer bi2 = 20;  // ⭕ 오토 박싱: 기본 정수(20)를 Integer 객체 상자에 자동으로 포장해 줌
@@ -222,12 +226,14 @@ int i2 = bi2 + 20; // ⭕ 오토 언박싱: Integer 상자에서 자동으로 �
 String s1 = Double.toString(3.14); // 숫자 3.14를 문자열 "3.14"로 변환
 Float pi = Float.parseFloat("3.14"); // 문자열 "3.14"를 진짜 소수 3.14 타입으로 변환
 Integer bi3 = Integer.valueOf("11", 16); // 16진수 문자열 "11"을 10진수 정수(17)로 변환
+```
+
 3. StringTokenizer
 개념 및 정의: 긴 문자열을 개발자가 지정한 특수 기호(구분자, Delimiter)를 기준으로 톡톡 끊어서 조각(토큰, Token)으로 분리해 주는 편리한 문자열 처리 도구입니다.
 
 사용법 및 예시 (StringTokenizerDemo.java 기반):
 
-Java
+```java
 String s = "of the peple,by the peple, for the peple";
 StringTokenizer st = new StringTokenizer(s, ","); // 콤마(,)를 기준으로 자르겠다!
 
@@ -236,7 +242,12 @@ System.out.println(st.countTokens()); // 현재 잘린 조각이 총 몇 개인�
 while(st.hasMoreTokens()) { // 다음 꺼낼 조각이 남아있는 동안 무한 반복 (true/false)
     System.out.print("[" + st.nextToken() + "]"); // 조각을 하나씩 꺼내옴
 }
+
 // 출력 결과: [of the peple][by the peple][ for the peple]
+```
+
+---
+
 📂 테마 2: 자료구조와 만능 주머니 (컬렉션 프레임워크)
 관련 파일: ArrayListDemo.java, ListDemo.java, IteratorDemo.java, PerformanceDemo.java
 
@@ -245,7 +256,7 @@ while(st.hasMoreTokens()) { // 다음 꺼낼 조각이 남아있는 동안 무�
 
 사용법 및 예시 (ArrayListDemo.java 기반):
 
-Java
+```java
 // List.of로 고정된 리스트 만들기
 List<String> list = List.of("그랜저", "소나타", "아반테", "제네시스", "소울");
 System.out.println(list.indexOf("소나타")); // "소나타"가 몇 번째 방에 있는지 검색 (결과: 1)
@@ -260,23 +271,28 @@ cars1.remove("제네시스"); // 주머니에서 특정 데이터 삭제
 cars1.removeIf(c -> c.startsWith("소")); // "소"로 시작하는 자동차("소나타", "소울") 싹 다 지우기
 cars1.replaceAll(s -> "뉴" + s);        // 남은 모든 자동차 앞에 "뉴" 글자 붙여서 교체하기
 cars1.forEach(s -> System.out.print(s + " ")); // 하나씩 꺼내서 전부 출력하기
+```
+
 2. Arrays.asList의 한계점
 개념 및 정의: 일반 배열을 리스트 구조로 빠르게 변환해 주는 아주 유용한 기능이지만, 이렇게 만든 리스트는 고정된 배열의 성질을 그대로 가지고 있어서 방의 크기를 바꿀 수 없습니다.
 
 사용법 및 예시 (ListDemo.java 기반):
 
-Java
+```java
 String[] animals1 = {"사슴", "호랑이", "바다표범", "곰"};
 List<String> animals2 = Arrays.asList(animals1); // 배열을 리스트로 변경
 
 animals2.set(1, "앵무새"); // ⭕ 방의 내용을 수정하는 것은 가능!
 // animals2.add("늑대");   // ❌ 에러 발생! 방의 개수를 늘리는 추가(add)나 삭제(remove)는 절대 불가능!
+```
+
 3. Iterator (반복자)
 개념 및 정의: 주머니(Collection) 속에 들어있는 대량의 데이터들을 "처음부터 끝까지 안전하고 순서대로 하나씩 꺼내 가도록 돕는 전용 빨대/통로"입니다.
 
 사용법 및 예시 (IteratorDemo.java 기반):
 
-Java
+```java
+
 Collection<String> list = Arrays.asList("다람쥐", "개구리", "나비");
 Iterator<String> iterator = list.iterator(); // 주머니 전용 반복자(빨대)를 꽂음
 
@@ -284,6 +300,8 @@ while(iterator.hasNext()) { // 1. 다음 칸에 데이터가 아직 들어있니
     System.out.print(iterator.next() + "-"); // 2. 있으면 그거 꺼내오고 화살표를 다음 칸으로 이동!
 }
 // 출력 결과: 다람쥐-개구리-나비-
+```
+
 4. ArrayList vs LinkedList 성능 비교
 개념 및 정의: 둘 다 똑같이 데이터를 담는 List 주머니이지만, 내부 방 구조가 다릅니다.
 
@@ -299,6 +317,8 @@ ArrayList는 새 데이터를 맨 앞에 넣을 때마다 기존에 있던 모�
 
 LinkedList는 기존 방들을 건드릴 필요 없이 기차 맨 앞에 새 기차 칸 하나만 툭 연결해 주면 끝이라서 속도가 압도적으로 빠릅니다 (l1.addFirst(i)).
 
+---
+
 📂 테마 3: 코드를 극단적으로 줄이는 마법 (익명 클래스와 람다식)
 관련 파일: AnanymouseEx.java, FuntionalIntEx.java
 
@@ -307,7 +327,7 @@ LinkedList는 기존 방들을 건드릴 필요 없이 기차 맨 앞에 새 기
 
 사용법 및 예시 (AnanymouseEx.java 기반):
 
-Java
+```java
 interface MyInterface {
     void printMsg(String msg);
 }
@@ -325,12 +345,14 @@ public class AnanymouseEx {
         obj.printMsg("Hello"); // 호출해서 사용
     }
 }
+```
+
 2. 함수형 인터페이스와 람다식 (Lambda)
 개념 및 정의: 자바의 최신 문법으로, 메서드가 단 1개만 있는 인터페이스(@FunctionalInterface)일 때 위에서 배운 익명 클래스의 구구절절 길었던 코드(new, public void 등)마저 다 생략하고 화살표(->) 하나로 핵심 기능(로직)만 표현하는 마법 같은 코드 압축 기술입니다.
 
 사용법 및 예시 (FuntionalIntEx.java 기반):
 
-Java
+```java
 @FunctionalInterface // 자바 컴파일러에게 "이거 메서드 딱 1개짜리 함수형 인터페이스야"라고 알림
 interface Funcinter {
     public abstract int max(int a, int b);
@@ -345,6 +367,8 @@ public class FuntionalIntEx {
         System.out.println(f.max(10, 20)); // 결과: 20
     }
 }
+```
+
 🛠️ 12주차 전체 실습 클래스들의 총체적인 연관성 정리
 이번 12주차 코드들은 서로 다른 기능 같지만, 실은 자바의 객체 다루기 능력을 극대화하기 위해 톱니바퀴처럼 맞물려 있습니다.
 

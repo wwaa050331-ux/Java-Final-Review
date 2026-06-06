@@ -8,6 +8,7 @@
 * ⚠️ [예외 클래스 요약](#-예외-클래스-exception-class)
 * 📅 [3일차: 재네릭 클래스](#3일차-재네릭-클래스-week-11)
 * 📅 [4일차: 기본 API 및 Object, 컬렉션 프레임워크, 익명 클래스/람다식](#4일차-기본-api-및-object-컬렉션-프레임워크-익명-클래스람다식week12)
+* 📅 [5일차: HashSet, HashMap, Collections 유틸리티 기능](#java-13주차-실습-핵심-개념-총정리)
 
 ---
 
@@ -379,3 +380,313 @@ public class FuntionalIntEx {
 2. Collection 주머니와 최신 람다식 기술의 결합
 대량의 데이터를 ArrayList에 담아놓고 하나씩 꺼내 쓰거나 조건별로 지우려고 할 때 과거에는 Iterator 빨대를 꽂아 while문을 길게 돌려야 했습니다. (IteratorDemo 방식)
 하지만 12주차의 최종 진화형인 람다식 문법을 결합하면서, cars1.removeIf(c -> c.startsWith("소"))나 cars1.forEach(s -> System.out.print(s)) 처럼 수십 줄짜리 반복 제어 코드를 단 한 줄로 압축하여 컬렉션 데이터를 제어할 수 있게 연결됩니다.
+
+---
+
+## 📅 Java 13주차 실습 핵심 개념 총정리
+13주차 실습에서 다룬 자바 중급 과정의 핵심 테마(HashSet, HashMap, Collections 유틸리티 기능)에 대한 상세 정의, 사용법, 실습 코드 복원 및 분석 문서입니다.
+
+---
+
+**📂 테마 1: 중복을 허용하지 않는 주머니 (Set 계열)**
+관련 파일: HashSet1Demo.java, Fruit.java, HashSet2Demo.java
+
+**1. HashSet의 기본 특징과 활용**
+개념 및 정의: List와 달리 데이터의 저장 순서를 유지하지 않으며, 결정적으로 중복된 데이터를 절대 허용하지 않는 자료구조 주머니입니다.
+
+사용법: 값의 존재 여부를 빠르게 확인하거나, 대량의 데이터에서 중복을 자동으로 제거할 때 주로 사용합니다.
+
+실습 코드 분석 및 예시 (HashSet1Demo.java 복원):
+
+```Java
+package week13;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class HashSet1Demo {
+    public static void main(String[] args) {
+        // 1단계: HashSet 객체 생성 및 데이터 추가
+        Set<String> fruits = new HashSet<>();
+        fruits.add("사과");
+        fruits.add("바나나");
+        fruits.add("포도");
+        fruits.add("수박");
+        
+        // 동일한 데이터("사과")를 또 넣으려고 하면 알아서 중복을 걸러냄 (무시됨)
+        fruits.add("사과"); 
+        System.out.println("1단계 결과 (중복 제거) : " + fruits);
+
+        // 특정 데이터 삭제 및 존재 여부 확인 (contains)
+        fruits.remove("수박");
+        System.out.println("수박이 포함되어 있나? " + fruits.contains("수박"));
+        System.out.println("현재 주머니 크기(size): " + fruits.size());
+
+        // 2단계: 다른 컬렉션(List)을 이용해 또 다른 HashSet 생성
+        List<String> list = Arrays.asList("포도", "수박", "키위");
+        Set<String> h2 = new HashSet<>(list);
+        System.out.println("2단계 결과 : " + h2);
+
+        // addAll: 두 주머니 알맹이를 통째로 합치기 (합집합, 중복은 자동 제거)
+        fruits.addAll(h2);
+        System.out.println("3단계(addAll) 결과 : " + fruits);
+
+        // clear & isEmpty: 주머니 통째로 비우기 및 비어있는지 확인
+        fruits.clear();
+        System.out.println("주머니가 비어있나? " + fruits.isEmpty());
+    }
+}
+```
+
+**2. 사용자 정의 객체와 중복 판정 (equals, hashCode)**
+개념 및 정의: 자바 시스템이 만든 String은 "사과"라는 글자가 같으면 같은 데이터라고 판정하지만, 내가 직접 만든 클래스(Fruit)는 내부 알맹이 글자가 같아도 메모리 주소가 다르면 자바가 서로 다른 데이터로 인식하여 HashSet에 중복으로 들어갑니다.
+
+사용법 및 해결책: 클래스 내부에서 부모인 Object가 물려준 equals()와 hashCode()를 반드시 세트로 같이 재정의(@Override)해야만 HashSet이 중복을 정상적으로 걸러낼 수 있습니다.
+
+실습 코드 분석 및 예시 (Fruit.java & HashSet2Demo.java 복원):
+
+```Java
+// Fruit.java
+package week13;
+
+public class Fruit {
+    String name;
+
+    public Fruit(String name) {
+        this.name = name;
+    }
+
+    // 1) equals 오버라이딩: 주소값이 달라도 과일 이름(name)이 같으면 진짜 같다고 판정
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Fruit) {
+            Fruit f = (Fruit) obj;
+            return name.equals(f.name);
+        }
+        return false;
+    }
+
+    // 2) hashCode 오버라이딩: equals가 true가 나오면 주소형 해시코드값도 일치하게 만듦
+    // 해시 주머니(HashSet, HashMap) 계열은 hashCode 값이 다르면 equals 검사조차 안 하므로 필수입니다.
+    @Override
+    public int hashCode() {
+        return name != null ? name.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Fruit[name=" + name + "]";
+    }
+}
+```
+
+```Java
+// HashSet2Demo.java
+package week13;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class HashSet2Demo {
+    public static void main(String[] args) {
+        Set<Fruit> fruits = new HashSet<>();
+        
+        // Fruit 클래스에 equals와 hashCode를 올바르게 재정의했기 때문에 중복 저장이 막힙니다!
+        fruits.add(new Fruit("사과"));
+        fruits.add(new Fruit("사과")); 
+        
+        System.out.println("과일 주머니 크기: " + fruits.size()); // 출력 결과: 1 (중복 차단 성공)
+        System.out.println(fruits);
+    }
+}
+```
+
+---
+
+**📂 테마 2: 키(Key)와 값(Value)으로 저장하는 주머니 (Map 계열)**
+관련 파일: MapDemo.java, HashMapDemo.java
+
+**1. Map과 HashMap 구조**
+개념 및 정의: 사전(Dictionary)처럼 데이터를 다루는 구조입니다. 영단어(Key)를 찾으면 뜻(Value)이 나오는 것처럼 Key(키)와 Value(값)를 한 쌍(Entry)으로 묶어서 저장합니다.
+
+규칙: 주머니 안에서 Key(키)는 절대로 중복될 수 없으며, Value(값)는 중복이 가능합니다. 기존에 존재하는 Key에 또 put을 하면 데이터가 교체(수정)됩니다.
+
+실습 코드 분석 및 예시 (HashMapDemo.java & MapDemo.java 복원):
+
+```Java
+// HashMapDemo.java
+package week13;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
+public class HashMapDemo {
+    public static void main(String[] args) {
+        // Key는 정수(Integer), Value는 문자열(String)인 HashMap 생성
+        HashMap<Integer, String> map = new HashMap<>();
+        map.put(1, "basick");
+        map.put(2, "koonta");
+        map.put(3, "Layone");
+
+        // 순회 방식 1: entrySet()과 Iterator를 사용해 Key, Value 쌍을 한꺼번에 꺼내기
+        Set<Map.Entry<Integer, String>> entrySet = map.entrySet();
+        Iterator<Map.Entry<Integer, String>> itr = entrySet.iterator();
+        while (itr.hasNext()) {
+            Map.Entry<Integer, String> entry = itr.next();
+            System.out.println(entry.getKey() + " = " + entry.getValue());
+        }
+
+        // 순회 방식 2: keySet()을 사용해 Key들만 뽑아내서 반복문으로 하나씩 탐색하기
+        Set<Integer> keySet = map.keySet();
+        for (Integer key : keySet) {
+            System.out.println("Key: " + key + ", Value: " + map.get(key));
+        }
+    }
+}
+```
+
+```Java
+// MapDemo.java
+package week13;
+
+import java.util.Map;
+
+public class MapDemo {
+    public static void main(String[] args) {
+        // Map.of 를 이용해 데이터 수정/추가가 불가능한 고정형(Immutable) Map 객체 생성
+        Map<String, Integer> fruits = Map.of("사과", 5, "바나나", 3, "포도", 10, "딸기", 2);
+        
+        System.out.println("과일 종류 수: " + fruits.size());
+        System.out.println("포도가 있나요? " + fruits.containsKey("포도")); // Key 존재 확인
+        System.out.println("사과의 개수: " + fruits.get("사과")); // Key로 Value 찾기
+
+        // 💡 람다식(BiConsumer)을 결합해 깔끔하게 한 줄로 Map의 모든 요소 출력하기
+        fruits.forEach((key, value) -> System.out.println(key + "가 " + value + "개 있습니다."));
+    }
+}
+```
+
+---
+
+**📂 테마 3: 컬렉션을 요리하는 알고리즘 무기 (Collections 클래스)**
+관련 파일: SortDemo.java, SearchDemo.java, SuffleDemo.java, EtcDemo.java
+
+개념 및 정의: Arrays 클래스가 일반 배열([])을 제어하는 도구였다면, Collections 클래스는 List, Set, Map 같은 컬렉션 주머니들을 정렬, 역정렬, 무작위 섞기, 이진 검색, 빈도수 세기 등으로 가공해 주는 만능 유틸리티 클래스입니다.
+
+**1. 정렬과 역순 배치 (SortDemo.java 복원)**
+
+```Java
+package week13;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+public class SortDemo {
+    public static void main(String[] args) {
+        List<String> list = Arrays.asList("오렌지", "바나나", "망고", "사과", "파인애플");
+
+        // 1) Collections.sort + reverseOrder: 내림차순(역순)으로 가나다라 정렬 적용
+        Collections.sort(list, Collections.reverseOrder());
+        System.out.println("내림차순 정렬: " + list);
+
+        // 2) Collections.reverse: 현재 정렬 상태를 거울처럼 그대로 반전시킴
+        Collections.reverse(list);
+        System.out.println("리스트 반전: " + list);
+    }
+}
+2. 고속 데이터 이진 검색 (SearchDemo.java 복원)
+Java
+package week13;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+public class SearchDemo {
+    public static void main(String[] args) {
+        List<String> list = Arrays.asList("황금알", "돈", "같이", "보아라");
+
+        // ⚠️ 주의: binarySearch()를 쓰기 전에는 반드시 먼저 '오름차순 정렬'이 되어있어야 합니다!
+        Collections.sort(list); 
+        System.out.println("정렬된 상태: " + list);
+
+        // Collections.binarySearch: 이진 탐색 알고리즘을 사용해 고속으로 데이터 인덱스(방 번호) 추적
+        int index = Collections.binarySearch(list, "돈");
+        System.out.println("'돈'이 들어있는 위치(방 번호): " + index);
+    }
+}
+```
+
+**3. 요소 회전과 무작위 섞기 (SuffleDemo.java 복원)**
+```Java
+package week13;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class SuffleDemo {
+    public static void main(String[] args) {
+        List<Character> list = new ArrayList<>();
+        for (char c = 'A'; c <= 'G'; c++) {
+            list.add(c); // A, B, C, D, E, F, G 저장
+        }
+        System.out.println("최초 리스트: " + list);
+
+        // 1) Collections.rotate: 지정한 칸수만큼 데이터를 뒤로 밀어서 회전시킴 (마지막 칸은 맨 앞으로 이동)
+        Collections.rotate(list, 2);
+        System.out.println("2칸 회전 리스트: " + list);
+
+        // 2) Collections.shuffle: 리스트 내부의 요소 순서를 카드 섞듯 완전 무작위로 뒤흔듦
+        Collections.shuffle(list);
+        System.out.println("무작위 섞은 리스트: " + list);
+    }
+}
+```
+
+**4. 요소의 빈도수 측정 (EtcDemo.java 복원)**
+```Java
+package week13;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+
+public class EtcDemo {
+    public static void main(String[] args) {
+        // 중복 데이터가 많이 섞인 원본 리스트 생성
+        List<String> list1 = List.of("사과", "포도", "수박", "사과", "키위", "사과", "망고", "포도");
+
+        // HashSet 주머니를 이용하여 원본의 중복 데이터 완전히 거르기
+        HashSet<String> set = new HashSet<>(list1);
+        List<String> list2 = new ArrayList<>(set);
+        Collections.sort(list2); // 깔끔하게 정렬
+
+        // Collections.frequency: 원본 주머니(list1)에 특정 과일 데이터가 총 몇 개씩 분포하는지 세어줌
+        for (String fruit : list2) {
+            int count = Collections.frequency(list1, fruit);
+            System.out.printf("%s : %d개\n", fruit, count);
+        }
+    }
+}
+```
+
+---
+
+🛠️ 13주차 전체 실습 클래스들의 총체적인 연관성 정리
+이번 주차 실습 코드들은 자바에서 가장 많이 활용되는 자료구조의 확장과 데이터 가공 및 조작 기법의 긴밀한 상호 연동을 다루고 있습니다.
+
+1. HashSet과 HashMap의 긴밀한 커넥션 관계
+자바 시스템 내부에서 HashSet은 완전히 독자적으로 돌아가는 구조가 아니라 사실 HashMap의 메커니즘을 그대로 빌려서 구현되어 있습니다. HashMapDemo 코드를 살펴보면 주머니 안의 모든 키를 꺼내올 때 map.keySet() 메서드를 사용하는데, 이 메서드가 반환하는 자료형 타입이 바로 Set 구조입니다. 즉, Map의 키 중복 방지 성질과 Set의 유일성 성질이 서로 끈끈하게 엮여 있음을 실습을 통해 확인할 수 있습니다.
+
+2. Collection 주머니들과 Collections 알고리즘 도구 상자의 연동
+ArrayList나 HashSet 등 다양한 주머니(Collection)에 대량의 데이터를 담았을 때, 이를 개발자가 직접 알고리즘 코드를 구현해 정렬하거나 섞거나 빈도수를 세려면 코드가 굉장히 비대해집니다.
+실습 파일들의 연관성을 보면 Collections라는 강력한 도구 상자가 뒤를 받쳐줌으로써, List와 Set 주머니 객체들을 단 한 줄의 메서드 명령어(sort, binarySearch, shuffle, frequency)만으로 가공하고 요리해 내는 긴밀한 연동 관계를 보여줍니다.
+
+(※ 참고사항: 파일 중 포함된 JDBCTest_01.class 파일은 자바의 데이터베이스 연결 라이브러리인 java.sql 접근 불가로 컴파일 오류가 그대로 묶여 있는 아티팩트 파일이므로, 핵심 실습 개념 공부 시에는 제외하셔도 무방합니다.)

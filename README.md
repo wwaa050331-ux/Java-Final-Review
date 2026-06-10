@@ -18,7 +18,32 @@
 * **구현(Implement):** 설계도를 바탕으로 실제 기능을 채워 넣는 것.
 * **상수 선언:** 인터페이스 내 변수는 자동으로 `public static final`이 되므로 상수는 대문자로 선언하며, `String`으로 여러 변수를 동시에 선언할 수 있음.
 * **default 메서드:** 인터페이스가 `default` 키워드를 가질 때만 `{}` 블록(몸체)을 가질 수 있음.
-* **private static 메서드:** 인터페이스 내부에서만 자기들끼리 공통으로 호출하여 사용할 때 선언함.
+* **static**
+> Static 멤버: 프로그램이 실행될 때(클래스가 메모리에 로드될 때) Method(메서드) 영역/Static 영역에 딱 한 번만 메모리가 할당됩니다. 그리고 프로그램이 종료될 때까지 메모리에 계속 남아있습니다.
+이 때문에 static이 붙은 변수나 메서드는 객체를 생성(new)하지 않고도 클래스명.멤버명으로 바로 사용할 수 있습니다.
+* **접근자 (Getter)** : 안쪽에 있는 데이터를 "가져오는(Get)" 창구입니다. (예: "내 지갑에 얼마 있는지 확인만 해줘")
+
+* **설정자 (Setter)** : 안쪽에 있는 데이터를 "변경하는(Set)" 창구입니다. 그냥 바꾸는 게 아니라, 이상한 데이터가 들어오지 못하게 검사하는 문지기 역할을 해요. (예: "내 나이를 -5살로 바꾼다고? 그건 안 돼! 올바른 값만 입력해")
+* **생성자와 메안메서드 차이점**
+  
+| 구분 | 생성자 (Constructor) | 메인 메서드 (Main Method) |
+| :--- | :--- | :--- |
+| **목적** | 객체(인스턴스)가 처음 태어날 때 초기화하기 위함 | 프로그램의 시작 버튼을 누르기 위함 |
+| **이름** | 클래스 이름과 똑같아야 함 | 무조건 `main`이어야 함 |
+| **리턴 타입** | 아예 없음 (`void`도 안 적음) | `void` (리턴 값이 없음) |
+| **호출 시점** | `new 클래스명()` 할 때 자동으로 실행됨 | 프로그램이 실행될 때 가장 먼저 딱 한 번 실행됨 |
+  
+반환값이 없고 클래스 이름 이어야함
+
+* **상속과 인터페이스의 차이점**
+* 
+| 구분 | 상속 (`extends`) | 인터페이스 (`implements`) |
+| :--- | :--- | :--- |
+| **핵심 개념** | **개념적 연결 (IS-A 관계)**<br>"~은 ~의 일종이다" | **기능적 연결 (CAN-DO 관계)**<br>"~을 할 수 있다" |
+| **목적** | 부모의 코드를 그대로 **재사용**하고 기능을 확장하기 위함 | 동일한 **동작 규칙(규격)**을 강제하여 교체가 가능하게 만들기 위함 |
+| **다중 구현** | **단 하나의 클래스만** 상속 가능 (단일 상속) | **여러 개의 인터페이스를 동시에** 구현 가능 (다중 구현) |
+| **기본 상태** | 부모가 이미 완성해 둔 변수와 메서드를 물려받음 | 알맹이 없는 껍데기(추상 메서드)만 받아서 내가 직접 완성해야 함 |  
+
 * ### 📂 자바 주요 자료구조 및 디자인 패턴 요약
 종류 (도구) | 핵심 규칙 (메커니즘) | 주요 메서드 세트 | 주요 활용 사례 | 비유 |
 | :--- | :--- | :--- | :--- | :--- |
@@ -33,11 +58,14 @@
 ### 💡 핵심 뼈대 코드
 ```java
 public interface ICalculator {
-    String PLUS = "plus";
-    String MINUS = "minus";
-    String MULTIPLE = "multiple"; 
-
-    int add(int a, int b);
+    String PLUS = "plus",String MINUS = "minus",String MULTIPLE = "multiple"; 
+    public int plus(int i,int j);
+	public int minus(int i,int j);
+    //추상 메서드이기 때문에 구현 클래스에서 반드시 구현해야하
+    //*예시 {
+    int result = i + j;        // 구체적인 로직 (구현의 일부)
+    return result;}             // 최종 결과 반환 (구현의 마무리)
+    * //
 
     default int multiple(int i, int j) { 
         return i * j;
@@ -46,6 +74,14 @@ public interface ICalculator {
     private static void initMessage(String opt) {  
         System.out.println(opt + "시작합니다~~~~");
     }
+    public static int exec(String opt,int i,int j) {
+        //static이기 때문에 객체 생성 가능
+		//객체를 따로 생성(new)하지 않아도 ICalculator.exec(...) 형태로 어디서나 바로 호출할 수 있는 정적 메서드입니다. 
+		//어떤 연산(opt)을 할지, 어떤 숫자들(i, j)을 가지고 계산할지 제어하는 컨트롤러 역할을 합니다.
+		// TODO Auto-generated method stub
+	initMessage(opt);
+	CalculatorImpl cal=new CalculatorImpl();
+	int retVal=0;
 }
 ```
 ## 2일차: 인터페이스와 예외 클래스 (Week 10)

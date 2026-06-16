@@ -960,4 +960,164 @@ public class JdbcTemplate {
 }
 ```
 
----
+---  
+
+## 🔀 [복합 마스터 01] 인터페이스 + 제네릭 + 컬렉션 (week09 + week11 + week13)
+
+> **출제 시나리오:** 특정 상품을 관리하는 시스템을 구축하시오. 상품 정보를 담을 제네릭 구조의 `Entry` 클래스를 활용하고, 이를 추가/조회하는 기능은 인터페이스로 설계한 뒤 `ArrayList` 자료구조를 사용해 구현하시오.
+
+### 📋 1. 인터페이스 설계 ( week09 / week10 )
+```java
+import java.util.List;
+
+// 데이터를 관리하는 표준 규격 정의
+interface IRepository<T> {
+    void add(T item);         // 데이터 추가
+    List<T> getAll();         // 전체 데이터 조회
+    void printAll();          // 전체 데이터 출력 유틸리티
+}
+> 📦 2. 제네릭 엔트리 클래스 ( week11 )
+```Java
+// Key와 Value를 쌍으로 갖는 제네릭 데이터 클래스
+class ItemEntry<K, V> {
+    private K id;
+    private V name;
+
+    public ItemEntry(K id, V name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public K getId() { return id; }
+    public V getName() { return name; }
+
+    @Override
+    public String toString() {
+        return "[ID: " + id + ", 상품명: " + name + "]";
+    }
+}
+```
+> 🛠️ 3. 인터페이스 구현 및 컬렉션 활용 ( week13 )
+```Java
+import java.util.ArrayList;
+import java.util.List;
+
+// 인터페이스를 상속받아 ArrayList로 실제 데이터 로직 구현
+class ItemRepositoryImpl implements IRepository<ItemEntry<Integer, String>> {
+    // 컬렉션 프레임워크 활용
+    private List<ItemEntry<Integer, String>> db = new ArrayList<>();
+
+    @Override
+    public void add(ItemEntry<Integer, String> item) {
+        db.add(item);
+    }
+
+    @Override
+    public List<ItemEntry<Integer, String>> getAll() {
+        return db;
+    }
+
+    @Override
+    public void printAll() {
+        // week13 Iterator 패턴 또는 For-each 루프로 순회
+        for (ItemEntry<Integer, String> item : db) {
+            System.out.println(item);
+        }
+    }
+}
+```
+> 🚀 4. 메인 실행 클래스
+```Java
+public class CombinedDemo01 {
+    public static void main(String[] args) {
+        // 다형성을 이용한 객체 생성
+        IRepository<ItemEntry<Integer, String>> repo = new ItemRepositoryImpl();
+
+        // 제네릭 데이터 주입 및 컬렉션에 추가
+        repo.add(new ItemEntry<>(101, "자바 기말 족보"));
+        repo.add(new ItemEntry<>(102, "오픈북 치트시트"));
+
+        // 출력
+        repo.printAll();
+    }
+}
+```
+## 🗄️ [복합 마스터 02] JDBC + 예외 처리 + 컬렉션 변환 (week10 + week13 + week14)
+출제 시나리오: 데이터베이스(DB)에서 회원 정보를 조회하여 자바 프로그램의 ArrayList에 담은 뒤, 회원 목록을 정렬(Sort)하여 출력하시오. DB 연동 중 발생할 수 있는 모든 에러는 예외 처리를 해야 합니다.
+
+> 👤 1. 회원 데이터 클래스 ( week12 Object )
+
+```Java
+// 데이터를 담을 바구니(DTO) 역할의 클래스
+class User implements Comparable<User> {
+    private String id;
+    private int score;
+
+    public User(String id, int score) {
+        this.id = id;
+        this.score = score;
+    }
+
+    public String getId() { return id; }
+    public int getScore() { return score; }
+
+    // week13 SortDemo에서 Collections.sort()를 쓰기 위한 정렬 기준 정의 (점수 기준 내림차순)
+    @Override
+    public int compareTo(User other) {
+        return Integer.compare(other.score, this.score); 
+    }
+
+    @Override
+    public String toString() {
+        return "아이디: " + id + ", 점수: " + score;
+    }
+}
+```
+> 🔌 2. JDBC 연동 및 데이터 가공 ( week10 + week14 )
+```Java
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class CombinedDemo02 {
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/school";
+        String user = "root";
+        String password = "password";
+
+        // 결과를 담을 컬렉션 생성
+        List<User> userList = new ArrayList<>();
+
+        // 자원 자동 해제를 위한 try-with-resources 문법 (또는 기존 finally 사용 가능)
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            
+            try (Connection conn = DriverManager.getConnection(url, user, password);
+                 PreparedStatement pstmt = conn.prepareStatement("SELECT id, score FROM students");
+                 ResultSet rs = pstmt.executeQuery()) {
+
+                // 1. JDBC로 데이터를 읽어서 컬렉션(List)에 담기
+                while (rs.next()) {
+                    String id = rs.getString("id");
+                    int score = rs.getInt("score");
+                    userList.add(new User(id, score));
+                }
+            }
+        } catch (ClassNotFoundException e) {
+            System.out.println("드라이버 로드 실패: " + e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("DB 연동 예외 발생 (week10): " + e.getMessage());
+        }
+
+        // 2. 컬렉션 정렬 수행 (week13 SortDemo 응용)
+        Collections.sort(userList);
+
+        // 3. 결과 출력
+        System.out.println("--- 성적 우수자 순위 ---");
+        for (User u : userList) {
+            System.out.println(u);
+        }
+    }
+}
+```

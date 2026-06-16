@@ -9,7 +9,7 @@
 * 📅 [3일차: 제네릭 클래스](#3일차-제네릭-클래스-week-11)
 * 📅 [4일차: 기본 API 및 Object, 컬렉션 프레임워크, 익명 클래스/람다식](#4일차-기본-api-및-object-컬렉션-프레임워크-익명-클래스람다식week12)
 * 📅 [5일차: 컬렉션 & 유틸리티](#5일차-hashset-hashmap-collections-유틸리티-기능)
-
+* [📅 15주차. 주차별 전체 핵심 개념 요약](#-15주차-주차별-전체-핵심-개념-요약)
 ---
 ## 1일차: 인터페이스와 구현 (Week 09)
 
@@ -724,14 +724,240 @@ public class EtcDemo {
 
 ---
 
-🛠️ 13주차 전체 실습 클래스들의 총체적인 연관성 정리
+## 🛠️ 13주차 전체 실습 클래스들의 총체적인 연관성 정리
 이번 주차 실습 코드들은 자바에서 가장 많이 활용되는 자료구조의 확장과 데이터 가공 및 조작 기법의 긴밀한 상호 연동을 다루고 있습니다.
 
-1. HashSet과 HashMap의 긴밀한 커넥션 관계
-자바 시스템 내부에서 HashSet은 완전히 독자적으로 돌아가는 구조가 아니라 사실 HashMap의 메커니즘을 그대로 빌려서 구현되어 있습니다. HashMapDemo 코드를 살펴보면 주머니 안의 모든 키를 꺼내올 때 map.keySet() 메서드를 사용하는데, 이 메서드가 반환하는 자료형 타입이 바로 Set 구조입니다. 즉, Map의 키 중복 방지 성질과 Set의 유일성 성질이 서로 끈끈하게 엮여 있음을 실습을 통해 확인할 수 있습니다.
+**1. HashSet과 HashMap의 긴밀한 커넥션 관계**
+자바 시스템 내부에서 HashSet은 완전히 독자적으로 돌아가는 구조가 아니라 사실 HashMap의 메커니즘을 그대로 빌려서 구현되어 있습니다. HashMapDemo 코드를 살펴보면 주머니 안의 모든 키를 꺼내올 때 map.keySet() 메서드를 사용하는데, 이 메서드가 반환하는 자료형 타입이 바로 Set 구조입니다. 즉, Map의 키 중복 방지 성질과 Set의 유일성 성질이 서로 끈끈하게 엮여 있음을 실습을 통해 확인할 수 있습니다.  
 
-2. Collection 주머니들과 Collections 알고리즘 도구 상자의 연동
+
+**2. Collection 주머니들과 Collections 알고리즘 도구 상자의 연동**
 ArrayList나 HashSet 등 다양한 주머니(Collection)에 대량의 데이터를 담았을 때, 이를 개발자가 직접 알고리즘 코드를 구현해 정렬하거나 섞거나 빈도수를 세려면 코드가 굉장히 비대해집니다.
 실습 파일들의 연관성을 보면 Collections라는 강력한 도구 상자가 뒤를 받쳐줌으로써, List와 Set 주머니 객체들을 단 한 줄의 메서드 명령어(sort, binarySearch, shuffle, frequency)만으로 가공하고 요리해 내는 긴밀한 연동 관계를 보여줍니다.
 
 (※ 참고사항: 파일 중 포함된 JDBCTest_01.class 파일은 자바의 데이터베이스 연결 라이브러리인 java.sql 접근 불가로 컴파일 오류가 그대로 묶여 있는 아티팩트 파일이므로, 핵심 실습 개념 공부 시에는 제외하셔도 무방합니다.)
+
+
+---
+
+## 15주차. 주차별 전체 핵심 개념 요약  
+
+---  
+
+### week09 & week10 (인터페이스와 다형성, 예외 처리)
+
+ICalculator, CalculatorImpl: 인터페이스 구현의 표준 패턴입니다.
+
+ControllablePolyDemo, RemoteControllable: 인터페이스를 통한 다형성(Polymorphism) 구현을 다룹니다.
+
+TryCatchDemo, ThrowsDemo: 프로그램이 멈추지 않도록 예외를 처리하는 try-catch 구문과 예외를 던지는 throws의 개념입니다.  
+
+---
+
+### week11 (제네릭 - Generic)
+
+GenericClassDemo, EntryDemo, GenericCup: 타입을 미리 정하지 않고 런타임에 결정하여 데이터 타입을 안전하게 다루는 기법입니다 (<T>, <K, V>).
+
+---
+
+### week12 & week13 (자바 기본 API 및 컬렉션 프레임워크)
+
+StringTokenizerDemo, WrapperDemo, ObjectMethodDemo: 자바 내장 문자열 분리 및 기본 기능을 다룹니다.
+
+ArrayListDemo, HashSetDemo, HashMapDemo, TreeSetDemo: 데이터를 저장하는 핵심 자료구조들입니다. 순서가 중요하면 List, 중복 제거는 Set, 키-값 쌍은 Map을 씁니다.
+
+SortDemo, SearchDemo, SuffleDemo: 데이터를 정렬하고 검색하고 섞는 유틸리티 기법들입니다.
+
+
+---
+
+### week14 (JDBC - Java Database Connectivity)
+
+JDBCTest_01 ~ 06: 자바 코드로 데이터베이스(DB)에 연결하여 데이터를 조회(Select), 추가(Insert), 수정(Update), 삭제(Delete)하는 핵심 실무 영역입니다. 점수 비중이 가장 높을 확률이 큽니다.
+
+**2. 시험장 필수 소스코드 (USB 저장용)**
+각 개념별로 가장 뼈대가 되는 코드만 압축했습니다. 파일 하나에 몰아넣거나 주차별 파일로 분리해서 가져가세요.
+
+>>📌 코드 1: 인터페이스 + 다형성 (week09~10)
+교수님이 "특정 기능을 하는 인터페이스를 만들고 이를 구현(implements)하는 클래스를 작성하라"고 할 때 기본 틀입니다.
+
+```Java
+// 1. 인터페이스 선언 (ICalculator.java)
+interface ICalculator {
+    int add(int a, int b); // 추상 메서드
+}
+
+// 2. 인터페이스 구현 (CalculatorImpl.java)
+class CalculatorImpl implements ICalculator {
+    @Override
+    public int add(int a, int b) {
+        return a + b;
+    }
+}
+
+// 3. 다형성 활용 실행 메인 클래스
+public class InterfaceDemo {
+    public static void main(String[] args) {
+        // 인터페이스 타입으로 객체 생성 (다형성)
+        ICalculator cal = new CalculatorImpl();
+        System.out.println("결과: " + cal.add(5, 3));
+    }
+}
+```
+
+>>📌 코드 2: 예외 처리 (week10)
+에러가 날 수 있는 구간을 방어하거나, 메서드 밖으로 에러를 던질 때 포맷입니다.
+
+```Java
+public class ExceptionDemo {
+    // throws: 나를 호출한 곳으로 예외를 던짐
+    public static void divide(int a, int b) throws ArithmeticException {
+        System.out.println(a / b);
+    }
+
+    public static void main(String[] args) {
+        try {
+            divide(10, 0); // 0으로 나누면 에러 발생
+        } catch (ArithmeticException e) {
+            System.out.println("0으로 나눌 수 없습니다: " + e.getMessage());
+        } finally {
+            System.out.println("예외 발생 여부와 상관없이 무조건 실행되는 구간");
+        }
+    }
+}
+```
+>>📌 코드 3: 제네릭 클래스 (week11)  
+
+멀티 타입(Entry<K, V>) 구조로 시험에 나올 확률이 높습니다.
+
+```Java
+// 제네릭 클래스 선언 (Entry.java 구조)
+class Entry<K, V> {
+    private K key;
+    private V value;
+
+    public Entry(K key, V value) {
+        this.key = key;
+        this.value = value;
+    }
+
+    public K getKey() { return key; }
+    public V getValue() { return value; }
+}
+
+public class GenericDemo {
+    public static void main(String[] args) {
+        // 런타임에 타입을 String과 Integer로 결정
+        Entry<String, Integer> entry = new Entry<>("Age", 25);
+        System.out.println(entry.getKey() + ": " + entry.getValue());
+    }
+}
+```
+📌 코드 4: 컬렉션 프레임워크 핵심 3대장 (week12~13)
+시험 문제에서 "데이터를 저장하고 가공하라"고 하면 무조건 이 셋 중 하나를 씁니다.
+
+```Java
+import java.util.*;
+
+public class CollectionDemo {
+    public static void main(String[] args) {
+        // 1. ArrayList (순서 있음, 중복 허용)
+        List<String> list = new ArrayList<>();
+        list.add("Apple");
+        list.add("Banana");
+        
+        // Iterator(반복자) 사용 패턴 (IteratorDemo용)
+        Iterator<String> iter = list.iterator();
+        while(iter.hasNext()) {
+            System.out.println(iter.next());
+        }
+
+        // 2. HashSet (순서 없음, 중복 불가)
+        Set<Integer> set = new HashSet<>();
+        set.add(10);
+        set.add(10); // 중복이라 무시됨
+
+        // 3. HashMap (Key-Value 쌍)
+        Map<String, String> map = new HashMap<>();
+        map.put("id", "student01");
+        map.put("name", "홍길동");
+        System.out.println("이름 출력: " + map.get("name"));
+        
+        // 정렬 및 섞기 (SortDemo, SuffleDemo)
+        Collections.sort(list); // 오름차순 정렬
+        Collections.shuffle(list); // 무작위 섞기
+    }
+}
+
+```
+>> 📌 코드 5: 문자열 쪼개기 (week12)
+
+StringTokenizer는 단골 출제 요소입니다.
+
+```Java
+import java.util.StringTokenizer;
+
+public class TokenizerDemo {
+    public static void main(String[] args) {
+        String query = "자바,DB,인터페이스,제네릭";
+        // 쉼표(,)를 기준으로 문자열 분리
+        StringTokenizer st = new StringTokenizer(query, ",");
+        
+        while(st.hasMoreTokens()) {
+            System.out.println(st.nextToken());
+        }
+    }
+}
+```
+
+>> 📌 코드 6: [가장 중요] JDBC 표준 템플릿 (week13~14)
+
+실기 시험에서 JDBC 코딩을 하라고 하면 아래 뼈대 코드에서 URL, 계정 정보, SQL 구문만 바꾸면 90%는 끝납니다. 무조건 가져가세요.
+
+```Java
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+public class JdbcTemplate {
+    public static void main(String[] args) {
+        // DB 연결 정보 (시험 문제에 주어지는 대로 수정할 것)
+        String url = "jdbc:mysql://localhost:3306/mydb"; 
+        String user = "root";
+        String password = "password";
+
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            // 1. 드라이버 로드 및 연결
+            Class.forName("com.mysql.cj.jdbc.Driver"); // 또는 Oracle 드라이버
+            conn = DriverManager.getConnection(url, user, password);
+
+            // 2. SQL 작성 (조회 예시)
+            String sql = "SELECT * FROM users WHERE age >= ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, 20); // 1번째 물음표(?)에 값 바인딩
+
+            // 3. 실행 및 결과 처리
+            rs = pstmt.executeQuery(); // SELECT 문은 executeQuery() / C,U,D는 executeUpdate()
+            while (rs.next()) {
+                // 컬럼명에 맞게 데이터 가져오기
+                System.out.println("이름: " + rs.getString("name"));
+                System.out.println("나이: " + rs.getInt("age"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // 4. 자원 해제 (연 순서 반대로 close)
+            try { if (rs != null) rs.close(); } catch (Exception e) {}
+            try { if (pstmt != null) pstmt.close(); } catch (Exception e) {}
+            try { if (conn != null) conn.close(); } catch (Exception e) {}
+        }
+    }
+}
+```
+
+---
